@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.example.leetcodegate.app-debug-59:/xml_accessibility_service_config.xml.flat",
+        "source": "com.example.leetcodegate.app-main-61:/xml/accessibility_service_config.xml"
+    },
+    {
+        "merged": "com.example.leetcodegate.app-debug-59:/xml_backup_rules.xml.flat",
+        "source": "com.example.leetcodegate.app-main-61:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.example.leetcodegate.app-debug-59:/xml_data_extraction_rules.xml.flat",
+        "source": "com.example.leetcodegate.app-main-61:/xml/data_extraction_rules.xml"
+    }
+]

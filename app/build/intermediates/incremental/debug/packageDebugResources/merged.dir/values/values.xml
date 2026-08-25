@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_service_description">Required to detect when Instagram is opened and enforce the LeetCode lock screen.</string>
+    <string name="app_name">LeetCode Gate</string>
+    <style name="Theme.LeetCodeGate" parent="android:Theme.Material.Light.NoActionBar"/>
+</resources>

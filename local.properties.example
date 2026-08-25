@@ -1,0 +1,3 @@
+# Copy this file to local.properties and add your API Key
+NIM_API_KEY=YOUR_NVIDIA_NIM_API_KEY_HERE
+NIM_BASE_URL=https://integrate.api.nvidia.com/v1
