@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.stringSetPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import androidx.datastore.preferences.core.Preferences
 
 class CompletedProblemStore(private val context: Context) {
     companion object {
@@ -35,5 +36,11 @@ class CompletedProblemStore(private val context: Context) {
     suspend fun isCompleted(problemId: String): Boolean {
         val normalizedId = problemId.trim().uppercase()
         return completedProblems.first().contains(normalizedId)
+    }
+
+    suspend fun clearAll() {
+        context.dataStore.edit { preferences ->
+            preferences[COMPLETED_PROBLEMS] = emptySet()
+        }
     }
 }

@@ -2,19 +2,23 @@ package com.example.leetcodegate.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import android.widget.TextView
+import io.noties.markwon.Markwon
 import androidx.core.content.ContextCompat
 import com.example.leetcodegate.AppContainer
 import com.example.leetcodegate.camera.CameraManager
@@ -24,7 +28,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun VerificationScreen(viewModel: VerificationViewModel, container: AppContainer, onSuccess: () -> Unit, onCancel: () -> Unit) {
     val state by viewModel.state.collectAsState()
-    
+
     when (val currentState = state) {
         is VerificationState.Camera -> {
             val context = LocalContext.current
@@ -50,7 +54,7 @@ fun VerificationScreen(viewModel: VerificationViewModel, container: AppContainer
         is VerificationState.ExplanationInput -> {
             ExplanationScreen(
                 problemId = currentState.problemId,
-                title = currentState.title,
+                title = "Detected Problem Number ${currentState.problemId}",
                 initialExplanation = currentState.explanation,
                 errorMessage = currentState.error,
                 onValidate = { explanation -> 
@@ -66,7 +70,7 @@ fun VerificationScreen(viewModel: VerificationViewModel, container: AppContainer
         is VerificationState.ValidatingLlm -> {
             ExplanationScreen(
                 problemId = currentState.problemId,
-                title = currentState.title,
+                title = "Detected Problem Number ${currentState.problemId}",
                 initialExplanation = currentState.explanation,
                 errorMessage = null,
                 onValidate = { },
@@ -78,13 +82,25 @@ fun VerificationScreen(viewModel: VerificationViewModel, container: AppContainer
             )
         }
         is VerificationState.Success -> {
-            ResultScreen("Success!", "You've earned 5 minutes of Instagram.", true, "Awesome!") {
+            ResultScreen(
+                "[x] Solution Accepted",
+                "You earned 5 minutes of instagram",
+                currentState.feedback, 
+                true, 
+                "Acknowledge"
+            ) {
                 viewModel.reset()
                 onSuccess()
             }
         }
         is VerificationState.Error -> {
-            ResultScreen("Error", currentState.message, false, "Retake Photo") {
+            ResultScreen(
+                "[!] Error",
+                null,
+                currentState.message, 
+                false, 
+                "Retake Photo"
+            ) {
                 viewModel.reset()
             }
         }
@@ -93,25 +109,70 @@ fun VerificationScreen(viewModel: VerificationViewModel, container: AppContainer
 
 @Composable
 fun LoadingScreen(message: String) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             Spacer(modifier = Modifier.height(16.dp))
-            Text(message)
+            Text(message, color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.titleMedium)
         }
     }
 }
 
 @Composable
-fun ResultScreen(title: String, message: String, isSuccess: Boolean, actionText: String, onAction: () -> Unit) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(24.dp)) {
-            Text(title, style = MaterialTheme.typography.headlineMedium, color = if (isSuccess) Color(0xFF4CAF50) else Color(0xFFF44336))
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(message, style = MaterialTheme.typography.bodyLarge)
+fun ResultScreen(title: String, highlight: String?, message: String, isSuccess: Boolean, actionText: String, onAction: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center) {
+        Column(
+            horizontalAlignment = Alignment.Start, 
+            modifier = Modifier.padding(24.dp).verticalScroll(rememberScrollState())
+        ) {
+            Text(
+                title, 
+                style = MaterialTheme.typography.headlineMedium, 
+                color = if (isSuccess) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            if (highlight != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface, androidx.compose.foundation.shape.RoundedCornerShape(4.dp))
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        highlight, 
+                        style = MaterialTheme.typography.bodyLarge, 
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                    )
+                }
+                Spacer(modifier = Modifier.height(24.dp))
+            }
+            
+            AndroidView(
+                factory = { ctx ->
+                    TextView(ctx).apply {
+                        setTextColor(android.graphics.Color.parseColor("#201D1D"))
+                        typeface = android.graphics.Typeface.MONOSPACE
+                    }
+                },
+                update = { view ->
+                    val markwon = Markwon.create(view.context)
+                    markwon.setMarkdown(view, message)
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
             Spacer(modifier = Modifier.height(32.dp))
-            Button(onClick = onAction) {
-                Text(actionText)
+            Button(
+                onClick = onAction,
+                modifier = Modifier.fillMaxWidth().height(48.dp),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Text(actionText, style = MaterialTheme.typography.labelLarge)
             }
         }
     }
@@ -145,54 +206,17 @@ fun CameraScreen(cameraManager: CameraManager, onPhotoTaken: (java.io.File) -> U
         Box(modifier = Modifier.fillMaxSize()) {
             CameraPreview(cameraManager = cameraManager, modifier = Modifier.fillMaxSize())
             
-            androidx.compose.foundation.Canvas(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .graphicsLayer(alpha = 0.99f)
-            ) {
-                val canvasWidth = size.width
-                val canvasHeight = size.height
-                
-                drawRect(color = Color.Black.copy(alpha = 0.6f))
-                
-                val frameWidth = canvasWidth * 0.8f
-                val frameHeight = 150.dp.toPx()
-                val left = (canvasWidth - frameWidth) / 2f
-                val top = canvasHeight * 0.2f
-                
-                drawRoundRect(
-                    color = Color.Transparent,
-                    topLeft = androidx.compose.ui.geometry.Offset(left, top),
-                    size = androidx.compose.ui.geometry.Size(frameWidth, frameHeight),
-                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(16.dp.toPx()),
-                    blendMode = androidx.compose.ui.graphics.BlendMode.Clear
-                )
-                
-                drawRoundRect(
-                    color = Color.White,
-                    topLeft = androidx.compose.ui.geometry.Offset(left, top),
-                    size = androidx.compose.ui.geometry.Size(frameWidth, frameHeight),
-                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(16.dp.toPx()),
-                    style = androidx.compose.ui.graphics.drawscope.Stroke(width = 2.dp.toPx())
-                )
-            }
-            
-            Text(
-                text = "Align problem title inside the box",
-                color = Color.White,
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 80.dp),
-                style = MaterialTheme.typography.titleMedium
-            )
-
-            Button(
+            TextButton(
                 onClick = onCancel,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = Color.White
+                ),
                 modifier = Modifier
                     .align(Alignment.TopStart)
-                    .padding(16.dp)
+                    .padding(start = 4.dp, top = 16.dp)
+                    .background(Color.Black.copy(alpha = 0.5f), shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp))
             ) {
-                Text("Cancel")
+                Text("[ Cancel ]", style = MaterialTheme.typography.labelLarge)
             }
 
             Button(
@@ -219,12 +243,24 @@ fun CameraScreen(cameraManager: CameraManager, onPhotoTaken: (java.io.File) -> U
             ) {}
         }
     } else {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Camera permission is required to capture LeetCode problems.")
+        Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(24.dp)) {
+                Text(
+                    "Camera permission is required to capture LeetCode problems.", 
+                    style = MaterialTheme.typography.titleMedium, 
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                )
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }) {
-                    Text("Grant Permission")
+                Button(
+                    onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    ),
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
+                ) {
+                    Text("Grant Permission", style = MaterialTheme.typography.titleMedium)
                 }
             }
         }

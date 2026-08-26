@@ -15,7 +15,7 @@ fun LockScreenOverlay(onUnlockClicked: () -> Unit, onExitClicked: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black),
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -24,26 +24,40 @@ fun LockScreenOverlay(onUnlockClicked: () -> Unit, onExitClicked: () -> Unit) {
         ) {
             Text(
                 text = "Instagram Locked",
-                style = MaterialTheme.typography.headlineLarge,
-                color = Color.White
+                style = MaterialTheme.typography.displayLarge,
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "Complete a new LeetCode problem\nto unlock 5 minutes.",
-                style = MaterialTheme.typography.bodyLarge,
-                color = Color.LightGray,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(48.dp))
             Button(
                 onClick = onUnlockClicked,
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp),
+                modifier = Modifier.fillMaxWidth(0.8f).height(56.dp)
             ) {
-                Text(text = "Take Photo", color = Color.White)
+                Text(text = "Take Photo", style = MaterialTheme.typography.titleMedium)
             }
             Spacer(modifier = Modifier.height(16.dp))
-            TextButton(onClick = onExitClicked) {
-                Text(text = "Exit Instagram", color = Color.LightGray)
+            OutlinedButton(
+                onClick = onExitClicked,
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.primary
+                ),
+                border = androidx.compose.foundation.BorderStroke(2.dp, MaterialTheme.colorScheme.primary),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp),
+                modifier = Modifier.fillMaxWidth(0.8f).height(56.dp)
+            ) {
+                Text(text = "Exit Instagram", style = MaterialTheme.typography.titleMedium)
             }
         }
     }

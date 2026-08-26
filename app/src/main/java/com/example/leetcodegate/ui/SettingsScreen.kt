@@ -4,6 +4,8 @@ import android.content.ComponentName
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -26,27 +28,29 @@ fun SettingsScreen(container: AppContainer, onNavigateBack: () -> Unit) {
     var apiKey by remember { mutableStateOf("") }
     var baseUrl by remember { mutableStateOf("") }
     var model by remember { mutableStateOf("") }
-    var isConfigLoaded by remember { mutableStateOf(false) }
 
-    LaunchedEffect(llmConfig) {
-        if (!isConfigLoaded && llmConfig != null) {
-            apiKey = llmConfig!!.apiKey
-            baseUrl = llmConfig!!.baseUrl
-            model = llmConfig!!.model
-            isConfigLoaded = true
-        }
+    if (llmConfig != null && apiKey.isEmpty() && baseUrl.isEmpty() && model.isEmpty()) {
+        apiKey = llmConfig!!.apiKey
+        baseUrl = llmConfig!!.baseUrl
+        model = llmConfig!!.model
     }
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Settings") },
-                navigationIcon = {
-                    Button(onClick = onNavigateBack) {
-                        Text("Back")
-                    }
-                }
-            )
+            Column {
+                CenterAlignedTopAppBar(
+                    title = { Text("Settings", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) },
+                    navigationIcon = {
+                        TextButton(onClick = onNavigateBack) {
+                            Text("[ Back ]", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelLarge)
+                        }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background
+                    )
+                )
+                HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
+            }
         }
     ) { padding ->
         Column(
@@ -54,6 +58,7 @@ fun SettingsScreen(container: AppContainer, onNavigateBack: () -> Unit) {
                 .padding(padding)
                 .padding(16.dp)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             var isAccessibilityEnabled by remember { mutableStateOf(false) }
             val lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current
@@ -61,12 +66,11 @@ fun SettingsScreen(container: AppContainer, onNavigateBack: () -> Unit) {
             DisposableEffect(lifecycleOwner) {
                 val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
                     if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) {
-                        val am = context.getSystemService(android.content.Context.ACCESSIBILITY_SERVICE) as android.view.accessibility.AccessibilityManager
-                        val enabledServices = am.getEnabledAccessibilityServiceList(android.accessibilityservice.AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
-                        isAccessibilityEnabled = enabledServices?.any { 
-                            it.resolveInfo.serviceInfo.packageName == context.packageName && 
-                            it.resolveInfo.serviceInfo.name == InstagramAccessibilityService::class.java.name 
-                        } == true
+                        val enabledServices = Settings.Secure.getString(
+                            context.contentResolver,
+                            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+                        )
+                        isAccessibilityEnabled = enabledServices?.contains(context.packageName) == true
                     }
                 }
                 lifecycleOwner.lifecycle.addObserver(observer)
@@ -87,10 +91,18 @@ fun SettingsScreen(container: AppContainer, onNavigateBack: () -> Unit) {
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = {
+            Button(
+                onClick = {
                 context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-            }) {
-                Text("Open Accessibility Settings")
+            },
+                modifier = Modifier.fillMaxWidth().height(48.dp),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Text("Open Accessibility Settings", style = MaterialTheme.typography.labelLarge)
             }
             
             Spacer(modifier = Modifier.height(32.dp))
@@ -123,41 +135,16 @@ fun SettingsScreen(container: AppContainer, onNavigateBack: () -> Unit) {
                         Toast.makeText(context, "Configuration Saved!", Toast.LENGTH_SHORT).show()
                     }
                 },
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 8.dp).fillMaxWidth().height(48.dp),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
             ) {
-                Text("Save Configuration")
+                Text("Save Configuration", style = MaterialTheme.typography.labelLarge)
             }
             
-            Spacer(modifier = Modifier.height(32.dp))
-            
-            Text("Debugging", style = MaterialTheme.typography.titleMedium)
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Button(
-                    onClick = {
-                        coroutineScope.launch {
-                            container.creditManager.consumeCredit(100000)
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Clear Credit")
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(
-                    onClick = {
-                        val launchIntent = context.packageManager.getLaunchIntentForPackage("com.instagram.android")
-                        if (launchIntent != null) {
-                            context.startActivity(launchIntent)
-                        } else {
-                            Toast.makeText(context, "Instagram not installed", Toast.LENGTH_SHORT).show()
-                        }
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Test Protection")
-                }
-            }
         }
     }
 }

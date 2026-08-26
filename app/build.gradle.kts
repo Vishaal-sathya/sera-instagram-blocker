@@ -30,9 +30,11 @@ android {
 
         val nimApiKey = localProperties.getProperty("NIM_API_KEY") ?: ""
         val nimBaseUrl = localProperties.getProperty("NIM_BASE_URL") ?: "https://integrate.api.nvidia.com/v1"
+        val nimModel = localProperties.getProperty("NIM_MODEL") ?: "meta/llama-3.1-8b-instruct"
 
         buildConfigField("String", "NIM_API_KEY", "\"$nimApiKey\"")
         buildConfigField("String", "NIM_BASE_URL", "\"$nimBaseUrl\"")
+        buildConfigField("String", "NIM_MODEL", "\"$nimModel\"")
     }
 
     buildTypes {
@@ -87,6 +89,9 @@ dependencies {
     
     // JSON
     implementation("com.google.code.gson:gson:2.10.1")
+
+    // Markdown rendering for UI
+    implementation("io.noties.markwon:core:4.6.2")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

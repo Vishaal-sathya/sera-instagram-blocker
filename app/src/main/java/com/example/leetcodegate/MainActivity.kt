@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         val startDestination = intent.getStringExtra("start_destination") ?: "home"
 
         setContent {
-            MaterialTheme {
+            com.example.leetcodegate.ui.DystopianTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

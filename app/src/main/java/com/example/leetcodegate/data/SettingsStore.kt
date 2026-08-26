@@ -7,6 +7,7 @@ import com.example.leetcodegate.BuildConfig
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.first
+import androidx.datastore.preferences.core.Preferences
 
 data class LlmConfig(
     val apiKey: String,
@@ -25,7 +26,7 @@ class SettingsStore(private val context: Context) {
         LlmConfig(
             apiKey = preferences[API_KEY] ?: BuildConfig.NIM_API_KEY,
             baseUrl = preferences[BASE_URL] ?: BuildConfig.NIM_BASE_URL,
-            model = preferences[MODEL] ?: "meta/llama-3.1-8b-instruct"
+            model = preferences[MODEL] ?: BuildConfig.NIM_MODEL
         )
     }
 

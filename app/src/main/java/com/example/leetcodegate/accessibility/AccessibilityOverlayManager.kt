@@ -48,16 +48,17 @@ class AccessibilityOverlayManager(private val service: AccessibilityService) {
                 }
             }
             setContent {
-                LockScreenOverlay(
-                    onUnlockClicked = {
-                        removeOverlay() // Eagerly remove to prevent visual flicker
-                        val intent = Intent(service, MainActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            putExtra("start_destination", "verification")
-                        }
-                        service.startActivity(intent)
-                    },
-                    onExitClicked = {
+                com.example.leetcodegate.ui.DystopianTheme {
+                    LockScreenOverlay(
+                        onUnlockClicked = {
+                            removeOverlay() // Eagerly remove to prevent visual flicker
+                            val intent = Intent(service, MainActivity::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                putExtra("start_destination", "verification")
+                            }
+                            service.startActivity(intent)
+                        },
+                        onExitClicked = {
                         removeOverlay()
                         val homeIntent = Intent(Intent.ACTION_MAIN).apply {
                             addCategory(Intent.CATEGORY_HOME)
@@ -66,6 +67,7 @@ class AccessibilityOverlayManager(private val service: AccessibilityService) {
                         service.startActivity(homeIntent)
                     }
                 )
+                } // closes DystopianTheme
             }
         }
 

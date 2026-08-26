@@ -678,6 +678,7 @@ drawable ic_call_answer_video
 drawable ic_call_answer_video_low
 drawable ic_call_decline
 drawable ic_call_decline_low
+drawable logo
 drawable notification_action_background
 drawable notification_bg
 drawable notification_bg_low
@@ -811,6 +812,8 @@ id line1
 id line3
 id listMode
 id list_item
+id markwon_drawables_scheduler
+id markwon_drawables_scheduler_last_text_hashcode
 id message
 id middle
 id multiply
@@ -949,6 +952,8 @@ layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
+mipmap ic_launcher
+mipmap ic_launcher_round
 string abc_action_bar_home_description
 string abc_action_bar_up_description
 string abc_action_menu_overflow_description

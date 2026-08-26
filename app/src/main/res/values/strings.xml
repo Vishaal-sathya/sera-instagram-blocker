@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">LeetCode Gate</string>
+    <string name="app_name">Sera</string>
     <string name="accessibility_service_description">Required to detect when Instagram is opened and enforce the LeetCode lock screen.</string>
 </resources>

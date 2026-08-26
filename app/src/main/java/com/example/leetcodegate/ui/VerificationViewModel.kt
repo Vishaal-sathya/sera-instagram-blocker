@@ -27,7 +27,7 @@ sealed class VerificationState {
         val ocrText: String, 
         val explanation: String
     ) : VerificationState()
-    object Success : VerificationState()
+    data class Success(val feedback: String) : VerificationState()
     data class Error(val message: String) : VerificationState()
 }
 
@@ -40,7 +40,9 @@ class VerificationViewModel(private val container: AppContainer) : ViewModel() {
             _state.value = VerificationState.ProcessingOcr
             try {
                 val visionText = container.ocrEngine.extractText(file)
+                android.util.Log.d("OCR_DEBUG", "RAW TEXT:\n${visionText.text}")
                 val extracted = container.problemExtractor.extractProblemDetails(visionText)
+                android.util.Log.d("OCR_DEBUG", "EXTRACTED: $extracted")
                 
                 if (extracted == null) {
                     _state.value = VerificationState.Error("Could not detect a LeetCode problem ID.")
@@ -70,6 +72,8 @@ class VerificationViewModel(private val container: AppContainer) : ViewModel() {
     }
 
     fun submitExplanation(problemId: String, title: String?, ocrText: String, explanation: String) {
+        if (_state.value is VerificationState.ValidatingLlm) return
+        
         viewModelScope.launch {
             _state.value = VerificationState.ValidatingLlm(problemId, title, ocrText, explanation)
             try {
@@ -88,14 +92,14 @@ class VerificationViewModel(private val container: AppContainer) : ViewModel() {
                     try {
                         container.completedProblemStore.addCompleted(problemId)
                         container.creditManager.addCredit(300)
-                        _state.value = VerificationState.Success
+                        _state.value = VerificationState.Success(result.interview_feedback)
                     } catch (e: Exception) {
                         if (e is kotlinx.coroutines.CancellationException) throw e
                         container.completedProblemStore.removeCompleted(problemId)
                         _state.value = VerificationState.ExplanationInput(problemId, title, ocrText, explanation, "Database Error: Failed to add credit.")
                     }
                 } else {
-                    _state.value = VerificationState.ExplanationInput(problemId, title, ocrText, explanation, "Rejected: ${result.reason}")
+                    _state.value = VerificationState.ExplanationInput(problemId, title, ocrText, explanation, "Rejected: ${result.reason}\n\nFeedback: ${result.interview_feedback}")
                 }
             } catch (e: Exception) {
                 if (e is kotlinx.coroutines.CancellationException) throw e

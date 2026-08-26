@@ -73,6 +73,7 @@ MERGED from [androidx.compose.runtime:runtime-saveable-android:1.6.6] C:\Users\V
 MERGED from [androidx.compose.runtime:runtime-android:1.6.6] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\94aba2347dffdbcfb16375156f7fe442\workspace\transformed\runtime-release\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\5fd6120ea7ab2b5ea7b39261e2b49ea4\workspace\transformed\annotation-experimental-1.4.0\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\bd2bb66f1a36330bfb1cff5648bc70ef\workspace\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [io.noties.markwon:core:4.6.2] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\aacdcf7696b74a05307d3ca8599f5dd8\workspace\transformed\core-4.6.2\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.exifinterface:exifinterface:1.3.2] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\f5197c67a970fe4d83973a9955729e59\workspace\transformed\exifinterface-1.3.2\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\8b39cb15b9fd095e66436a3681c48d1c\workspace\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\33fc4a8aa8b7f80c9df7e5086c9354db\workspace\transformed\core-runtime-2.2.0\AndroidManifest.xml:17:1-22:12
@@ -162,11 +163,11 @@ MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\Vishaal\.gradle
 	android:fullBackupContent
 		ADDED from C:\Users\Vishaal\Documents\GitHub\sera-instagram-blocker\app\src\main\AndroidManifest.xml:15:9-54
 	android:roundIcon
-		ADDED from C:\Users\Vishaal\Documents\GitHub\sera-instagram-blocker\app\src\main\AndroidManifest.xml:18:9-63
+		ADDED from C:\Users\Vishaal\Documents\GitHub\sera-instagram-blocker\app\src\main\AndroidManifest.xml:18:9-54
 	tools:targetApi
 		ADDED from C:\Users\Vishaal\Documents\GitHub\sera-instagram-blocker\app\src\main\AndroidManifest.xml:21:9-29
 	android:icon
-		ADDED from C:\Users\Vishaal\Documents\GitHub\sera-instagram-blocker\app\src\main\AndroidManifest.xml:16:9-58
+		ADDED from C:\Users\Vishaal\Documents\GitHub\sera-instagram-blocker\app\src\main\AndroidManifest.xml:16:9-43
 	android:allowBackup
 		ADDED from C:\Users\Vishaal\Documents\GitHub\sera-instagram-blocker\app\src\main\AndroidManifest.xml:13:9-35
 	android:theme
@@ -373,6 +374,8 @@ MERGED from [androidx.annotation:annotation-experimental:1.4.0] C:\Users\Vishaal
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\5fd6120ea7ab2b5ea7b39261e2b49ea4\workspace\transformed\annotation-experimental-1.4.0\AndroidManifest.xml:5:5-44
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\bd2bb66f1a36330bfb1cff5648bc70ef\workspace\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\bd2bb66f1a36330bfb1cff5648bc70ef\workspace\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [io.noties.markwon:core:4.6.2] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\aacdcf7696b74a05307d3ca8599f5dd8\workspace\transformed\core-4.6.2\AndroidManifest.xml:7:5-9:41
+MERGED from [io.noties.markwon:core:4.6.2] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\aacdcf7696b74a05307d3ca8599f5dd8\workspace\transformed\core-4.6.2\AndroidManifest.xml:7:5-9:41
 MERGED from [androidx.exifinterface:exifinterface:1.3.2] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\f5197c67a970fe4d83973a9955729e59\workspace\transformed\exifinterface-1.3.2\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.exifinterface:exifinterface:1.3.2] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\f5197c67a970fe4d83973a9955729e59\workspace\transformed\exifinterface-1.3.2\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\Vishaal\.gradle\caches\9.3.0\transforms\8b39cb15b9fd095e66436a3681c48d1c\workspace\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44

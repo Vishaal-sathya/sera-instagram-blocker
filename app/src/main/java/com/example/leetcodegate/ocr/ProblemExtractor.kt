@@ -13,10 +13,32 @@ class ProblemExtractor {
         val isSolved = Regex("(?i)\\b(Accepted|Success)\\b").containsMatchIn(rawText)
         
         // Relaxed whitespace requirement after the period to accommodate OCR glitches
-        val pattern1 = Regex("^\\s*(Q?\\d{1,5})\\.\\s*([A-Z].*)", RegexOption.MULTILINE)
-        val pattern2 = Regex("^\\s*(Q?\\d{1,5})\\s+[-|]?\\s*([A-Z].*)", RegexOption.MULTILINE)
+        val pattern1 = Regex("^\\s*(Q?\\d{1,5})\\s*\\.\\s*([A-Za-z].*)", RegexOption.MULTILINE)
+        val pattern2 = Regex("^\\s*(Q?\\d{1,5})\\s+[-|]?\\s*([A-Za-z].*)", RegexOption.MULTILINE)
         
-        // 1. Contextual Anchors (Search for "Description" or "Editorial")
+        // 1. Try to find a strong match (pattern1 with a period) anywhere in the text
+        for (block in visionText.textBlocks) {
+            val match = pattern1.find(block.text)
+            if (match != null) {
+                val title = match.groupValues[2].trim()
+                if (!title.lowercase().startsWith("class ") && !title.lowercase().startsWith("def ")) {
+                    return ExtractedProblem(match.groupValues[1].uppercase(), title, isSolved)
+                }
+            }
+        }
+        
+        // 2. Fallback to weak match (pattern2 without a period)
+        for (block in visionText.textBlocks) {
+            val match = pattern2.find(block.text)
+            if (match != null) {
+                val title = match.groupValues[2].trim()
+                if (!title.lowercase().startsWith("class ") && !title.lowercase().startsWith("def ")) {
+                    return ExtractedProblem(match.groupValues[1].uppercase(), title, isSolved)
+                }
+            }
+        }
+
+        // 3. Last Resort Fallback: Just look for a number in the anchor block
         var anchorBlock: Text.TextBlock? = null
         for (block in visionText.textBlocks) {
             val text = block.text.lowercase()
@@ -27,30 +49,11 @@ class ProblemExtractor {
         }
 
         if (anchorBlock != null) {
-            val anchorRect = anchorBlock.boundingBox
-            if (anchorRect != null) {
-                // Find blocks that are below the anchor
-                for (block in visionText.textBlocks) {
-                    val rect = block.boundingBox
-                    if (rect != null && rect.top >= anchorRect.bottom - 20) {
-                        val match = pattern1.find(block.text) ?: pattern2.find(block.text)
-                        if (match != null) {
-                            return ExtractedProblem(match.groupValues[1].uppercase(), match.groupValues[2].trim(), isSolved)
-                        }
-                        // Check if it's a standalone ID near the anchor
-                        if (block.text.trim().matches(Regex("(?i)^Q?\\d{1,5}$"))) {
-                            return ExtractedProblem(block.text.trim().uppercase(), null, isSolved)
-                        }
-                    }
-                }
-            }
-        }
-
-        // 2. Strict Regex for standard LeetCode headers on a per-block basis
-        for (block in visionText.textBlocks) {
-            val match = pattern1.find(block.text) ?: pattern2.find(block.text)
+            val text = anchorBlock.text.trim()
+            val match = Regex("(?i)^Q?\\d{1,5}$").find(text) ?: Regex("(?i)^(Q?\\d{1,5})").find(text)
+            
             if (match != null) {
-                return ExtractedProblem(match.groupValues[1].uppercase(), match.groupValues[2].trim(), isSolved)
+                return ExtractedProblem(match.groupValues[1].uppercase(), "Unknown Title", isSolved)
             }
         }
         

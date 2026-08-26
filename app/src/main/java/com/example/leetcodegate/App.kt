@@ -28,8 +28,9 @@ class AppContainer(private val application: Application) {
     // Shared Utilities
     val okHttpClient by lazy { 
         OkHttpClient.Builder()
-            .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-            .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .connectTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(120, java.util.concurrent.TimeUnit.SECONDS)
+            .writeTimeout(120, java.util.concurrent.TimeUnit.SECONDS)
             .build()
     }
     val gson by lazy { Gson() }

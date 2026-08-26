@@ -24,17 +24,22 @@ fun ExplanationScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Verify Solution") },
-                navigationIcon = {
-                    TextButton(onClick = onCancel) {
-                        Text("Cancel", color = MaterialTheme.colorScheme.onPrimaryContainer)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
+            Column {
+                CenterAlignedTopAppBar(
+                    title = { Text("Verify Solution", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) },
+                    navigationIcon = {
+                        TextButton(
+                            onClick = onCancel
+                        ) {
+                            Text("[ Cancel ]", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelLarge)
+                        }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background
+                    )
                 )
-            )
+                HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
+            }
         }
     ) { padding ->
         Column(
@@ -44,9 +49,8 @@ fun ExplanationScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val displayTitle = if (title != null) "$problemId. $title" else "Problem $problemId"
             Text(
-                text = "Detected: $displayTitle",
+                text = "Problem Number $problemId",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
@@ -74,10 +78,16 @@ fun ExplanationScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                label = { Text("Explanation") },
+                label = { Text("Explanation", style = MaterialTheme.typography.labelLarge) },
                 placeholder = { Text("e.g. I used a hash map to store complements...") },
                 minLines = 10,
-                enabled = !isValidating
+                enabled = !isValidating,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                    focusedLabelColor = MaterialTheme.colorScheme.primary,
+                    cursorColor = MaterialTheme.colorScheme.primary
+                )
             )
             
             Row(
@@ -99,17 +109,25 @@ fun ExplanationScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                enabled = explanation.length >= 30 && !isValidating
+                enabled = explanation.length >= 30 && !isValidating,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledContainerColor = MaterialTheme.colorScheme.surface,
+                    disabledContentColor = MaterialTheme.colorScheme.onBackground
+                ),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
             ) {
                 if (isValidating) {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = Color.White
+                        modifier = Modifier.size(20.dp),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        strokeWidth = 2.dp
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Text("Validating...")
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text("Validating...", style = MaterialTheme.typography.labelLarge)
                 } else {
-                    Text("Submit for Verification")
+                    Text("Submit for Verification", style = MaterialTheme.typography.labelLarge)
                 }
             }
         }
