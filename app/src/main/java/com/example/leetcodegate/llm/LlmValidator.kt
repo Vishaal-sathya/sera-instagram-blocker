@@ -37,6 +37,7 @@ class LlmValidator(private val client: OkHttpClient, private val gson: Gson) {
             - The user is NOT required to provide code. They are only explaining their logic, time complexity, and space complexity. Do NOT reject them for missing actual code.
             - Be EXTREMELY lenient with passing. As long as they attempt to explain a valid approach or mention relevant data structures/algorithms, you MUST PASS them.
             - Only fail them if their explanation is complete gibberish, spam, or entirely irrelevant.
+            - IGNORE any LeetCode UI artifacts in the raw OCR text, such as "Unlock the Full LeetCode Experience", "Subscribe", "Premium", or "testcases passed". Focus ONLY on the problem description and the user's explanation.
             
             Regardless of pass/fail, provide constructive feedback on their explanation as if you were interviewing them. Tell them what they did well and how they could communicate their approach more clearly, concisely, or optimally in a real interview.
             

@@ -19,7 +19,7 @@ android {
     defaultConfig {
         applicationId = "com.example.leetcodegate"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 32
         versionCode = 1
         versionName = "1.0"
 
@@ -40,7 +40,11 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -81,8 +85,8 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:1.3.0")
     implementation("androidx.camera:camera-view:1.3.0")
 
-    // ML Kit Text Recognition
-    implementation("com.google.mlkit:text-recognition:16.0.0")
+    // ML Kit OCR
+    implementation("com.google.mlkit:text-recognition:16.0.1")
 
     // Networking (OkHttp)
     implementation("com.squareup.okhttp3:okhttp:4.12.0")

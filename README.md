@@ -1,6 +1,6 @@
 <div align="center">
   <img src="assets/logo_readme.png" alt="Sera Logo" width="600" style="border-radius: 12px;"/>
-  <h1>Sera</h1>
+  <!-- <h1>Sera</h1> -->
   <p><strong>A ruthless Android productivity app that holds Instagram hostage until you solve LeetCode problems.</strong></p>
 </div>
 
@@ -37,25 +37,29 @@ Sera is a local-first Android application designed to cure doom-scrolling by enf
 - **OkHttp & Gson:** For lightweight, fast API calls to any OpenAI-compatible LLM endpoint.
 - **OpenCode TUI Aesthetic:** A beautiful, minimal, terminal-inspired user interface.
 
-## 💻 Local Development & Setup
+## 💻 Installation
 
-This repository is built to be credential-free. You must provide your own LLM API key.
+Sera is ready to use out of the box! You do not need to build it from source.
 
-1. Clone the repository.
-2. Create a `local.properties` file in the root directory.
-3. Add your OpenAI-compatible API key (default setup uses Nvidia NIM):
-   ```properties
-   NIM_API_KEY=nvapi-YOUR-API-KEY-HERE
-   NIM_BASE_URL=https://integrate.api.nvidia.com/v1
-   NIM_MODEL=meta/llama-3.1-8b-instruct
-   ```
-4. Build and install via Android Studio.
+1. Go to the **[Releases](../../releases)** page of this repository.
+2. Download the latest `Sera.apk` file and install it on your Android device.
+3. Open Sera and grant the required Accessibility permissions.
+4. Navigate to the **Settings** screen in the app to configure your LLM (Large Language Model).
 
-## 🔑 How to get a free API Key
-Sera is configured by default to use Nvidia NIM, which provides generous free credits:
+## 🔑 AI Configuration (Bring Your Own Key)
+
+Sera is built to be completely private and requires you to provide your own API key for an OpenAI-compatible LLM endpoint. 
+
+**Note:** All testing and development for Sera was done using **Nvidia NIM**, as they provide free credits for a lot of different models. but it should work for any kind of api that uses a base_url, the model_name and an api_key
+
+**How to get a free API Key via Nvidia NIM:**
 1. Go to [build.nvidia.com](https://build.nvidia.com).
 2. Create an account and navigate to the **Llama 3.1 8B Instruct** model.
-3. Click "Get API Key" and paste it into your `local.properties` (or input it directly via the app's Settings screen).
+3. Click "Get API Key" and copy it.
+4. Open the Sera app, tap the Settings icon, and enter:
+   - **API Key:** `nvapi-YOUR-API-KEY-HERE`
+   - **Base URL:** `https://integrate.api.nvidia.com/v1`
+   - **Model Name:** `meta/llama-3.1-8b-instruct`
 
 ## 📄 License
 MIT License
