@@ -54,12 +54,12 @@ Sera is built to be completely private and requires you to provide your own API 
 
 **How to get a free API Key via Nvidia NIM:**
 1. Go to [build.nvidia.com](https://build.nvidia.com).
-2. Create an account and navigate to the **Llama 3.1 8B Instruct** model.
+2. Create an account and navigate to any model.
 3. Click "Get API Key" and copy it.
 4. Open the Sera app, tap the Settings icon, and enter:
-   - **API Key:** `nvapi-YOUR-API-KEY-HERE`
-   - **Base URL:** `https://integrate.api.nvidia.com/v1`
-   - **Model Name:** `meta/llama-3.1-8b-instruct`
+   - **API Key:** `API-KEY-GIVEN-IN-CODE-SNIPPET`
+   - **Base URL:** `URL-GIVEN-IN-CODE-SNIPPET`
+   - **Model Name:** `MODEL-NAME-GIVEN-IN-CODE-SNIPPET`
 
 ## 📄 License
 MIT License
