@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/logo_readme.png" alt="Sera Logo" width="200" style="border-radius: 12px;"/>
+  <img src="assets/logo_readme.png" alt="Sera Logo" width="600" style="border-radius: 12px;"/>
   <h1>Sera</h1>
   <p><strong>A ruthless Android productivity app that holds Instagram hostage until you solve LeetCode problems.</strong></p>
 </div>
