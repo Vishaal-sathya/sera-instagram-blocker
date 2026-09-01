@@ -108,8 +108,14 @@ class LlmValidator(private val client: OkHttpClient, private val gson: Gson) {
                         android.util.Log.d("LlmValidator", "DeepSeek Reasoning: $reasoning")
                     }
                     
-                    // Strip markdown code blocks in case the LLM wrapped the JSON
-                    val cleanContent = content.trim().removePrefix("```json").removePrefix("```").removeSuffix("```").trim()
+                    // Find the first { and last } to extract the JSON object robustly
+                    val startIndex = content.indexOf('{')
+                    val endIndex = content.lastIndexOf('}')
+                    val cleanContent = if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+                        content.substring(startIndex, endIndex + 1)
+                    } else {
+                        content.trim().removePrefix("```json").removePrefix("```").removeSuffix("```").trim()
+                    }
                     
                     val validationResult = gson.fromJson(cleanContent, LlmResponseSchema::class.java)
                     continuation.resume(validationResult)
